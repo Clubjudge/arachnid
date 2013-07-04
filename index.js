@@ -1,5 +1,5 @@
 var express = require('express'),
-  phantom = require('node-phantom'),
+  phantom = require('phantom-proxy'),
   app = express(),
   getContent,
   respond;
@@ -7,9 +7,10 @@ var express = require('express'),
 getContent = function(url, callback) {
   var content = '';
 
-  phantom.create(function(err, ph){
-    return ph.createPage(function(err, page) {
+  phantom.create({}, function(proxy){
+    page = proxy.page;
 
+    return page.open(url, function() {
       var lastReceived = new Date().getTime(),
         requestCount = 0,
         responseCount = 0,
@@ -39,16 +40,16 @@ getContent = function(url, callback) {
 
           page.evaluate(function(elem){
             return document.getElementsByTagName(elem)[0].innerHTML;
-          }, function(err, result){
+          }, function(result){
             callback(result);
-            ph.exit();
+            proxy.end(function() {
+              console.log('Phantom has exited!');
+            });
           }, 'html');
         }
       };
 
       checkCompleteInterval = setInterval(checkComplete, 1);
-
-      return page.open(url);
     });
   });
 };
