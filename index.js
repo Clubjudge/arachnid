@@ -2,7 +2,8 @@ var express = require('express'),
   phantom = require('phantom-proxy'),
   app = express(),
   getContent,
-  respond;
+  respond,
+  host = "http://clubjudge.com";
 
 getContent = function(url, callback) {
   var content = '';
@@ -59,7 +60,7 @@ respond = function(req, res) {
 
   if (!url) res.status(404).send('Not found');
 
-  getContent(url, function(content) {
+  getContent(host + url, function(content) {
     res.send(content);
   });
 };
