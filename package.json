@@ -4,7 +4,8 @@
   "description": "Site crawler for JS apps",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "forever start index.js",
+    "stop": "forever stop index.js"
   },
   "repository": {
     "type": "git",
