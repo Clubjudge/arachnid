@@ -56,7 +56,7 @@ getContent = function(url, callback) {
 respond = function(req, res) {
   url = req.query.url;
 
-  if (!url) return;
+  if (!url) res.status(404).send('Not found');
 
   getContent(url, function(content) {
     res.send(content);
