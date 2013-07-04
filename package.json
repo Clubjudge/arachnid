@@ -6,6 +6,7 @@
   "scripts": {
     "start": "forever start index.js",
     "stop": "forever stop index.js"
+    "restart": "forever restart index.js"
   },
   "repository": {
     "type": "git",
