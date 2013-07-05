@@ -4,8 +4,10 @@ var express = require('express'),
   program = require('commander'),
   fs = require('fs'),
   moment = require('moment'),
+  config = require ('../config'),
   app = express(),
   staleTime = moment.duration(1, 'weeks'),
+  configure,
   getContent,
   getFreshPage,
   fileIsStale,
@@ -22,6 +24,12 @@ program
   .option('-w, --writetofile <true|false>', 'enable saving of pages to files', Boolean, true)
   .option('-f, --folder <path/to/folder>', 'folder to write saved pages to', String, "./scrapes")
   .parse(process.argv);
+
+configure = function() {
+  if (config && config.folder) {
+    program.folder = config.folder;
+  }
+};
 
 writeToFile = function(filename, content) {
   console.log('Writing to file...');
@@ -157,5 +165,6 @@ respond = function(req, res) {
 
 app.get('/scrape', respond);
 
+configure();
 app.listen(program.port);
 console.log('Express server started on port %s', program.port);
