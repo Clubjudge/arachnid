@@ -1,17 +1,24 @@
+#!/usr/bin/env node
 var express = require('express'),
-  phantom = require('phantom-proxy'),
+  phantom = require('node-phantom'),
+  program = require('commander'),
   app = express(),
   getContent,
-  respond,
-  host = "http://clubjudge.com";
+  respond;
+
+program
+  .usage('[options]')
+  .option('-p, --port <port>', 'specify the port [8111]', Number, 8111)
+  .option('-h, --host <hostname>', 'specify the hostname [http://clubjudge.com]', String, "http://clubjudge.com")
+  .option('-t, --timeout <timeout (ms)>', 'specify the max timeout [10000]', Number, 10000)
+  .parse(process.argv);
 
 getContent = function(url, callback) {
   var content = '';
 
-  phantom.create({}, function(proxy){
-    page = proxy.page;
+  phantom.create(function(err, ph){
+    return ph.createPage(function(err, page) {
 
-    return page.open(url, function() {
       var lastReceived = new Date().getTime(),
         requestCount = 0,
         responseCount = 0,
@@ -19,6 +26,10 @@ getContent = function(url, callback) {
         startTime = new Date().getTime(),
         checkComplete,
         checkCompleteInterval;
+
+      page.onConsoleMessage = function(msg, line, source) {
+        console.log('page logs ' + source + ':' + line + ' - ' + msg);
+      };
 
       page.onResourceRequested = function(request) {
         if(requestIds.indexOf(request.id) === -1) {
@@ -36,21 +47,21 @@ getContent = function(url, callback) {
       };
 
       checkComplete = function() {
-        if((new Date().getTime() - lastReceived > 300 && requestCount === responseCount) || new Date().getTime() - startTime > 5000) {
+        if((new Date().getTime() - lastReceived > 300 && requestCount === responseCount) || new Date().getTime() - startTime > program.timeout) {
           clearInterval(checkCompleteInterval);
 
           page.evaluate(function(elem){
             return document.getElementsByTagName(elem)[0].innerHTML;
-          }, function(result){
+          }, function(err, result){
             callback(result);
-            proxy.end(function() {
-              console.log('Phantom has exited!');
-            });
+            ph.exit();
           }, 'html');
         }
       };
 
       checkCompleteInterval = setInterval(checkComplete, 1);
+
+      return page.open(url);
     });
   });
 };
@@ -60,12 +71,12 @@ respond = function(req, res) {
 
   if (!url) res.status(404).send('Not found');
 
-  getContent(host + url, function(content) {
+  getContent(program.host + url, function(content) {
     res.send(content);
   });
 };
 
 app.get('/scrape', respond);
 
-app.listen(8111);
-console.log('Express server started on port 8111');
+app.listen(program.port);
+console.log('Express server started on port %s', program.port);

@@ -4,9 +4,9 @@
   "description": "Site crawler for JS apps",
   "main": "index.js",
   "scripts": {
-    "start": "forever start index.js",
-    "stop": "forever stop index.js",
-    "restart": "forever restart index.js"
+    "start": "forever start bin/arachnid",
+    "stop": "forever stop bin/arachnid",
+    "restart": "forever restart bin/arachnid"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "license": "BSD",
   "dependencies": {
     "express": "~3.3.1",
-    "phantom-proxy": "~0.1.792"
+    "node-phantom": "~0.2.3",
+    "commander": "~1.2.0"
   }
 }
