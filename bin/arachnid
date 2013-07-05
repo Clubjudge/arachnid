@@ -2,8 +2,16 @@
 var express = require('express'),
   phantom = require('node-phantom'),
   program = require('commander'),
+  fs = require('fs'),
+  moment = require('moment'),
   app = express(),
+  staleTime = moment.duration(1, 'weeks'),
   getContent,
+  getFreshPage,
+  fileIsStale,
+  fileExists,
+  writeToFile,
+  formatFilename,
   respond;
 
 program
@@ -11,7 +19,47 @@ program
   .option('-p, --port <port>', 'specify the port [8111]', Number, 8111)
   .option('-h, --host <hostname>', 'specify the hostname [http://clubjudge.com]', String, "http://clubjudge.com")
   .option('-t, --timeout <timeout (ms)>', 'specify the max timeout [10000]', Number, 10000)
+  .option('-w, --writetofile <true|false>', 'enable saving of pages to files', Boolean, true)
+  .option('-f, --folder <path/to/folder>', 'folder to write saved pages to', String, "./scrapes")
   .parse(process.argv);
+
+writeToFile = function(filename, content) {
+  console.log('Writing to file...');
+  fs.writeFile(formatFilename(filename), content, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Saved ' + url + ' successfully');
+    }
+  });
+};
+
+fileExists = function(filename) {
+  return fs.existsSync(program.folder + formatFilename(filename));
+};
+
+fileIsStale = function(filename) {
+  var stats = fs.statSync(filename);
+  return (moment() > staleTime + moment(stats.mtime));
+};
+
+formatFilename = function(filename) {
+  var cleanFilename,
+    folder = program.folder;
+
+  cleanFilename = filename
+    .replace(/:\/\//gi, "_")
+    .replace(/\//gi, "_")
+    .replace(/\?/gi, "_")
+    .replace(/&/gi, "_")
+    .replace(/:/gi, "_");
+
+  if (folder.substr(folder.length -1, folder.length) !== '/') {
+    folder += '/';
+  }
+
+  return folder + cleanFilename;
+};
 
 getContent = function(url, callback) {
   var content = '';
@@ -66,14 +114,45 @@ getContent = function(url, callback) {
   });
 };
 
+getFreshPage = function(res, url) {
+  console.log('Getting a fresh page...');
+  getContent(url, function(content) {
+    if (program.writetofile) {
+      writeToFile(url, content);
+    }
+
+    res.send(content);
+  });
+};
+
 respond = function(req, res) {
   url = req.query.url;
 
   if (!url) res.status(404).send('Not found');
 
-  getContent(program.host + url, function(content) {
-    res.send(content);
-  });
+  url = program.host + url;
+
+  if (fileExists(url)) {
+    filename = formatFilename(url);
+
+    console.log('File exists, checking for staleness');
+
+    if (fileIsStale(filename)) {
+      return getFreshPage(res, url);
+    }
+
+    console.log('File exists and is not stale, reading from disk...');
+
+    fs.readFile(filename, 'utf-8', function(err, content) {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(content);
+      }
+    });
+  } else {
+    getFreshPage(res, url);
+  }
 };
 
 app.get('/scrape', respond);
