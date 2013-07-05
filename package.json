@@ -6,7 +6,8 @@
   "scripts": {
     "start": "forever start bin/arachnid",
     "stop": "forever stop bin/arachnid",
-    "restart": "forever restart bin/arachnid"
+    "restart": "forever restart bin/arachnid",
+    "pruneFiles": "node bin/prune"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+var fs = require('fs'),
+  config = require('../config.js');
+
+if (config && config.folder) {
+  folder = config.folder;
+
+  if (folder.substr(folder.length -1, folder.length) !== '/') {
+    folder += '/';
+  }
+
+  fs.readdir(folder, function(err, files) {
+    if (!err) {
+      files.forEach(function(filePath) {
+        filePath = folder + filePath;
+        fs.stat(filePath, function(err, stats) {
+          if (err) {
+            console.log(JSON.stringify(err));
+          } else {
+            if (stats.isFile()) {
+              fs.unlink(filePath, function(err) {
+                if (err) {
+                  console.log(JSON.stringify(err));
+                }
+              });
+            }
+          }
+        });
+      });
+    }
+  });
+}
