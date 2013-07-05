@@ -35,7 +35,7 @@ writeToFile = function(filename, content) {
 };
 
 fileExists = function(filename) {
-  return fs.existsSync(program.folder + formatFilename(filename));
+  return fs.existsSync(formatFilename(filename));
 };
 
 fileIsStale = function(filename) {
