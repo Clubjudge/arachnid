@@ -134,9 +134,11 @@ getFreshPage = function(res, url) {
 };
 
 respond = function(req, res) {
-  url = req.query.url;
-
-  if (!url) res.status(404).send('Not found');
+  url = req.headers['x-original-uri'];
+  if (!url) {
+   res.status(404).send('Not found');
+   return;
+  }
 
   url = program.host + url;
 
@@ -163,7 +165,7 @@ respond = function(req, res) {
   }
 };
 
-app.get('/scrape', respond);
+app.get('/*', respond);
 
 configure();
 app.listen(program.port);
