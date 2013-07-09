@@ -21,6 +21,8 @@ if (config && config.folder) {
               fs.unlink(filePath, function(err) {
                 if (err) {
                   console.log(JSON.stringify(err));
+                } else {
+                  console.log('File ' + filePath + ' pruned');
                 }
               });
             }
