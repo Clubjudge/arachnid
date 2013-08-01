@@ -129,7 +129,7 @@ getContent = function(url, callback) {
 getFreshPage = function(res, url) {
   console.log('Getting a fresh page...');
   getContent(url, function(content) {
-    if (config.writeToFile) {
+    if (config.writeToFile && config.folder) {
       writeToFile(url, content);
     }
 
