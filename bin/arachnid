@@ -146,6 +146,8 @@ respond = function(req, res) {
 
   url = config.host + url;
 
+  console.log('Handling url: ' + url);
+
   if (fileExists(url)) {
     filename = formatFilename(url);
 
@@ -173,4 +175,4 @@ app.get('/*', respond);
 
 configure();
 app.listen(config.port);
-console.log('Express server started on port %s', config.port);
+console.log('Arachnid spinning its web on port %s', config.port);
