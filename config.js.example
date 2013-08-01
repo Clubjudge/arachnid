@@ -1,0 +1,7 @@
+module.exports = {
+  folder: './scrapes',
+  port: 8111,
+  host: 'http://example.com',
+  writeToFile: true,
+  timeout: 10000
+};

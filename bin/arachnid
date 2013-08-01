@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 var express = require('express'),
   phantom = require('node-phantom'),
-  program = require('commander'),
   fs = require('fs'),
   moment = require('moment'),
-  config = require ('../config'),
+  config,
   app = express(),
   staleTime = moment.duration(1, 'weeks'),
   configure,
@@ -16,18 +15,22 @@ var express = require('express'),
   formatFilename,
   respond;
 
-program
-  .usage('[options]')
-  .option('-p, --port <port>', 'specify the port [8111]', Number, 8111)
-  .option('-h, --host <hostname>', 'specify the hostname [http://clubjudge.com]', String, "http://clubjudge.com")
-  .option('-t, --timeout <timeout (ms)>', 'specify the max timeout [10000]', Number, 10000)
-  .option('-w, --writetofile <true|false>', 'enable saving of pages to files', Boolean, true)
-  .option('-f, --folder <path/to/folder>', 'folder to write saved pages to', String, "./scrapes")
-  .parse(process.argv);
+function isUrl(url) {
+  // Simple URL validation, just validates the scheme name because URL validation is hell.
+  return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
+}
 
 configure = function() {
-  if (config && config.folder) {
-    program.folder = config.folder;
+  // Try to load config file
+  try {
+    config = require ('../config');
+  } catch(err) {
+    throw new Error('Could not find the config file! Please make sure a config.js file exists in the project root and is readable.');
+  }
+
+  // Bail out if there's no valid host
+  if (!isUrl(config.host)) {
+    throw new Error('The "host" key should contain a valid URL!');
   }
 };
 
@@ -53,7 +56,7 @@ fileIsStale = function(filename) {
 
 formatFilename = function(filename) {
   var cleanFilename,
-    folder = program.folder;
+    folder = config.folder;
 
   cleanFilename = filename
     .replace(/:\/\//gi, "_")
@@ -103,7 +106,8 @@ getContent = function(url, callback) {
       };
 
       checkComplete = function() {
-        if((new Date().getTime() - lastReceived > 300 && requestCount === responseCount) || new Date().getTime() - startTime > program.timeout) {
+        if((new Date().getTime() - lastReceived > 300 && requestCount === responseCount) || new Date().getTime() - startTime > config.timeout) {
+          console.log('requestCount', requestCount===responseCount);
           clearInterval(checkCompleteInterval);
 
           page.evaluate(function(elem){
@@ -125,7 +129,7 @@ getContent = function(url, callback) {
 getFreshPage = function(res, url) {
   console.log('Getting a fresh page...');
   getContent(url, function(content) {
-    if (program.writetofile) {
+    if (config.writeToFile) {
       writeToFile(url, content);
     }
 
@@ -140,7 +144,7 @@ respond = function(req, res) {
    return;
   }
 
-  url = program.host + url;
+  url = config.host + url;
 
   if (fileExists(url)) {
     filename = formatFilename(url);
@@ -168,5 +172,5 @@ respond = function(req, res) {
 app.get('/*', respond);
 
 configure();
-app.listen(program.port);
-console.log('Express server started on port %s', program.port);
+app.listen(config.port);
+console.log('Express server started on port %s', config.port);
