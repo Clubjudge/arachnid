@@ -7,6 +7,8 @@ A [PhantomJS](http://phantomjs.org) instance then executes all your Javascript c
 
 Optionally, Arachnid can save scraped pages to a folder of your choice, so that subsequent requests to the same resource are faster.
 
+For more info, check out our blog post on Arachnid at the [Clubjudge blog](http://blog.clubjudge.com/post/57057303972/introducing-arachnid).
+
 ## Configuration
 Arachnid expects a ```config.js``` file to be present in the project root. It ships with a ```config.js.example``` file with all available options. These are:
 
@@ -57,4 +59,10 @@ Over time the folder where Arachnid saves its scraped pages can become too large
 
 ```javascript
 npm run-script pruneFiles
+```
+
+An example of how to set up this task to run regularly through cron would be:
+
+```
+min hour dayOfMonth month dayOfWeek cd /PATH/TO/ARACHNID/; /PATH/TO/NPM run-script pruneFiles
 ```
