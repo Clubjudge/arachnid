@@ -107,7 +107,6 @@ getContent = function(url, callback) {
 
       checkComplete = function() {
         if((new Date().getTime() - lastReceived > 300 && requestCount === responseCount) || new Date().getTime() - startTime > config.timeout) {
-          console.log('requestCount', requestCount===responseCount);
           clearInterval(checkCompleteInterval);
 
           page.evaluate(function(elem){
@@ -115,6 +114,7 @@ getContent = function(url, callback) {
           }, function(err, result){
             callback(result);
             ph.exit();
+            ph._phantom.kill()
           }, 'html');
         }
       };
