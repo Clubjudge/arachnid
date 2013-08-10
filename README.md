@@ -1,5 +1,5 @@
 # Arachnid
-Arachnid is a simple service that allows your Javascript powered application to be fully indexed by SEO spiders
+Arachnid is a simple service that allows your Javascript powered application to be fully indexed by SEO spiders.
 
 You must configure your server to redirect traffic from search bots towards your Arachnid instance.
 Arachnid works by inspecting a custom HTTP Header ```x-original-uri```, and then hitting the configured hostname at the URL you provided.
