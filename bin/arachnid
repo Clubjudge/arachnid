@@ -23,7 +23,7 @@ function isUrl(url) {
 configure = function() {
   // Try to load config file
   try {
-    config = require ('../config');
+    config = require ('../config.js');
   } catch(err) {
     throw new Error('Could not find the config file! Please make sure a config.js file exists in the project root and is readable.');
   }
