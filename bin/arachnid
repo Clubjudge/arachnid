@@ -38,7 +38,7 @@ writeToFile = function(filename, content) {
   console.log('Writing to file...');
   fs.writeFile(formatFilename(filename), content, function(err) {
     if (err) {
-      console.log(err);
+      console.log('Error writing to file', err);
     } else {
       console.log('Saved ' + url + ' successfully');
     }
@@ -114,7 +114,6 @@ getContent = function(url, callback) {
           }, function(err, result){
             callback(result);
             ph.exit();
-            ph._phantom.kill()
           }, 'html');
         }
       };
