@@ -51,11 +51,13 @@ Starting will spin up an instance of bin/arachnid using [Forever](https://github
 
 ## Debian package
 Install dpkg-dev and build-essential
+```
 Run on root application:
 
 dpkg-buildpackage -us -uc
 
 to install:
+```
 dpkg -i ../arachnid_version.deb
 
 ## Stopping it
