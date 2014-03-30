@@ -1,0 +1,14 @@
+Source: arachnid
+Section: clubjudge_arachnid
+Priority: extra
+Maintainer: Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Homepage: http://www.clubjudge.com
+#Vcs-Git: git://git.debian.org/collab-maint/arachnid.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/arachnid.git;a=summary
+
+Package: arachnid
+Architecture: any
+Depends: node
+Description: Arachnid for Club Judge
