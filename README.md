@@ -57,8 +57,9 @@ Run on root application:
 dpkg-buildpackage -us -uc
 
 to install:
-```
+
 dpkg -i ../arachnid_version.deb
+```
 
 ## Stopping it
 ```
