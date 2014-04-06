@@ -1,0 +1,13 @@
+#!/bin/sh
+# postrm script for arachnid
+#
+# see: dh_installdeb(1)
+
+set -e
+
+if [ "$1" = "purge" ]
+then
+	rm -rf /var/www/arachnid
+	userdel arachnid
+fi
+exit 0

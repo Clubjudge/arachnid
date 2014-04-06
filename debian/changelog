@@ -1,0 +1,47 @@
+arachnid (1.0.6) stable; urgency=low
+
+  * update user in init.d
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:50:42 +0000
+
+arachnid (1.0.5) stable; urgency=low
+
+  * include init.d
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:46:32 +0000
+
+arachnid (1.0.4) stable; urgency=low
+
+  * include cd app_path before npm install in preinst
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:38:06 +0000
+
+arachnid (1.0.3) stable; urgency=low
+
+  * remove npm install from rules and create a preinst file
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:33:16 +0000
+
+arachnid (1.0.2) stable; urgency=low
+
+  * remove conffiles
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:28:04 +0000
+
+arachnid (1.0.1) stable; urgency=low
+
+  * install nodejs
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:24:33 +0000
+
+arachnid (1.0.0) stable; urgency=low
+
+  * create a debian package
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 11:09:53 +0000
+
+arachnid (1.0.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Joao Gabriel Lisanti <joao.gabriel@clubjudge.com>  Tue, 21 Jan 2014 10:52:34 +0000

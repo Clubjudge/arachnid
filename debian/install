@@ -1,0 +1,4 @@
+bin var/www/arachnid
+config.js.example var/www/arachnid
+package.json var/www/arachnid
+README.md var/www/arachnid

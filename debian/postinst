@@ -1,0 +1,11 @@
+#!/bin/sh
+# postinst script for arachnid
+#
+# see: dh_installdeb(1)
+USER="arachnid"
+GROUP="$USER"
+
+set -e 
+adduser --home /var/www/arachnid --system $USER --group
+chown -R $USER:$GROUP /var/www/arachnid
+exit 0
