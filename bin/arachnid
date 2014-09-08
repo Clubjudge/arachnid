@@ -110,7 +110,7 @@ getContent = function(url, callback) {
           clearInterval(checkCompleteInterval);
 
           page.evaluate(function(elem){
-            return document.getElementsByTagName(elem)[0].innerHTML;
+            return document.getElementsByTagName(elem)[0].outerHTML;
           }, function(err, result){
             callback(result);
             ph.exit();
