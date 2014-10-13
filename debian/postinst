@@ -9,5 +9,5 @@ APP_PATH=/var/www/arachnid
 set -e
 adduser --home $APP_PATH --system $USER --group
 chown -R $USER:$GROUP $APP_PATH
-su - bifrost -c 'cd $APP_PATH && /usr/bin/npm install --production' -s /bin/bash
+su - $USER -c 'cd $APP_PATH && /usr/bin/npm install --production' -s /bin/bash
 exit 0
