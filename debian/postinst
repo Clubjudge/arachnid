@@ -4,8 +4,10 @@
 # see: dh_installdeb(1)
 USER="arachnid"
 GROUP="$USER"
+APP_PATH=/var/www/arachnid
 
-set -e 
-adduser --home /var/www/arachnid --system $USER --group
-chown -R $USER:$GROUP /var/www/arachnid
+set -e
+adduser --home $APP_PATH --system $USER --group
+chown -R $USER:$GROUP $APP_PATH
+su - bifrost -c 'cd $APP_PATH && /usr/bin/npm install --production' -s /bin/bash
 exit 0
