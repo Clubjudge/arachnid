@@ -10,5 +10,5 @@ Homepage: http://www.clubjudge.com
 
 Package: arachnid
 Architecture: any
-Depends: node
+Depends: nodejs, nodejs-legacy
 Description: Arachnid for Club Judge
